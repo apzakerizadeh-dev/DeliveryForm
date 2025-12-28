@@ -1,0 +1,283 @@
+/* استایل‌های سفارشی برای اپلیکیشن فارسی */
+:root {
+    --primary-color: #2c5aa0;
+    --secondary-color: #28a745;
+    --accent-color: #17a2b8;
+    --light-bg: #f8f9fa;
+    --border-color: #dee2e6;
+}
+
+/* فونت فارسی */
+* {
+    font-family: 'Vazir', 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
+}
+
+/* بدنه */
+body {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+/* آیکون برنامه */
+.app-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary-color), #4a9eff);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(44, 90, 160, 0.2);
+}
+
+.app-icon i {
+    font-size: 28px;
+    color: white;
+}
+
+/* کارت‌ها */
+.card {
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-3px);
+}
+
+.card-header {
+    border-bottom: none;
+    font-weight: 600;
+}
+
+/* فرم‌ها */
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    padding: 12px 15px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(44, 90, 160, 0.25);
+}
+
+.form-control-lg {
+    padding: 14px 18px;
+    font-size: 17px;
+}
+
+/* ردیف محصولات */
+.product-row {
+    background: linear-gradient(to left, #ffffff, #fdfdfd);
+    border: 1px solid var(--border-color) !important;
+    transition: all 0.3s ease;
+}
+
+.product-row:hover {
+    background: linear-gradient(to left, #ffffff, #f8f9ff);
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* دکمه‌ها */
+.btn {
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 10px 24px;
+    transition: all 0.3s;
+    border: none;
+}
+
+.btn-lg {
+    padding: 14px 32px;
+    font-size: 17px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), #3a7bd5);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #24518f, #2c6bc1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(44, 90, 160, 0.3);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--secondary-color), #20c997);
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #218838, #1ba87e);
+    transform: translateY(-2px);
+}
+
+/* پیش‌نمایش SVG */
+#svgPreview {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    border: 2px dashed var(--border-color);
+    max-height: 600px;
+    overflow: auto;
+    text-align: right;
+    direction: rtl;
+}
+
+#svgPreview svg {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* اسکرول‌بار زیبا */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary-color), #4a9eff);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #24518f, #3a7bd5);
+}
+
+/* انیمیشن‌ها */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* رسپانسیو */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .btn-lg {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .product-row .row > div {
+        margin-bottom: 15px;
+    }
+}
+
+/* پیام‌ها */
+.alert {
+    border-radius: 12px;
+    border: none;
+    animation: fadeInUp 0.5s ease-out;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+    border-right: 4px solid #28a745;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+    border-right: 4px solid #dc3545;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+    color: #0c5460;
+    border-right: 4px solid #17a2b8;
+}
+
+/* برچسب‌های فرم */
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* استایل برای متن فارسی در SVG */
+.farsi-text {
+    font-family: 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    direction: rtl;
+    text-align: right;
+}
+
+/* شماره محصول */
+.product-number {
+    background: var(--primary-color);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+/* استایل برای پیش‌نمایش JPG */
+#svgPreview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* استایل برای حالت نمایش دوگانه */
+#svgPreview .row {
+    margin: 0;
+}
+
+#svgPreview .col-md-6 {
+    padding: 10px;
+}
+
+/* بهبود نمایش SVG در حالت دوگانه */
+#svgPreview svg {
+    max-width: 100%;
+    height: auto;
+    max-height: 400px;
+}
+
+/* استایل برای دکمه‌های جدید */
+.download-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.format-btn {
+    min-width: 120px;
+}
