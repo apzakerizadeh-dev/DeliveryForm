@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // سایر رویدادها
     document.getElementById('generateBtn').addEventListener('click', generateSVG);
-    document.getElementById('previewBtn').addEventListener('click', previewSVG);
+    
     document.getElementById('resetBtn').addEventListener('click', resetForm);
-    document.getElementById('printBtn').addEventListener('click', printForm);
-    document.getElementById('closePreview').addEventListener('click', closePreview);
+    document.getElementById('closePreview').addEventListener('click', closePreview); 
+    
     
     // تغییر: حذف محدودیت برای فیلدهای تلفن
     document.getElementById('buyerPhone').addEventListener('input', function(e) {
@@ -38,11 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
         this.value = convertToPersianNumbers(this.value);
     });
     
-    // اضافه کردن رویدادهای جدید برای دکمه‌های دانلود در بخش پیش‌نمایش
-    document.getElementById('downloadJpgBtn').addEventListener('click', downloadJPG);
-    document.getElementById('downloadSvgTxtBtn').addEventListener('click', downloadSvgAsTxt);
-    document.getElementById('shareBtn').addEventListener('click', shareSVG);
-    
     // رویداد ذخیره خودکار
     setupAutoSave();
     
@@ -51,7 +46,56 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // نمایش شماره فرم فعلی در کنسول
     console.log('شماره فرم فعلی:', getCurrentFormNumber());
+    // راه‌حل جایگزین: اضافه کردن رویدادها به صورت دینامیک
+    setupDynamicEventListeners();
 });
+// تابع برای تنظیم رویدادهای دینامیک
+function setupDynamicEventListeners() {
+    // اضافه کردن رویداد به body برای مدیریت رویدادهای دینامیک
+    document.body.addEventListener('click', function(e) {
+        // بررسی کلیک روی دکمه دانلود JPG
+        if (e.target && e.target.id === 'downloadJpgBtn') {
+            downloadJPG();
+            e.preventDefault();
+        }
+        
+        // بررسی کلیک روی دکمه دانلود SVG به صورت متن
+        if (e.target && e.target.id === 'downloadSvgTxtBtn') {
+            downloadSvgAsTxt();
+            e.preventDefault();
+        }
+        
+        // بررسی کلیک روی دکمه اشتراک‌گذاری
+        if (e.target && e.target.id === 'shareBtn') {
+            shareJPG();
+            e.preventDefault();
+        }
+        
+        // بررسی کلیک روی دکمه بستن پیش‌نمایش
+        if (e.target && e.target.id === 'closePreview') {
+            closePreview();
+            e.preventDefault();
+        }
+    });
+}
+
+// تابع بستن پیش‌نمایش - نسخه بهبود یافته
+function closePreview() {
+    console.log('Close preview clicked');
+    const previewSection = document.getElementById('previewSection');
+    if (previewSection) {
+        previewSection.style.display = 'none';
+        showMessage('پیش‌نمایش بسته شد', 'info');
+        
+        // پاک کردن محتوای پیش‌نمایش برای جلوگیری از انباشتگی
+        const svgPreview = document.getElementById('svgPreview');
+        if (svgPreview) {
+            svgPreview.innerHTML = '';
+        }
+    } else {
+        console.error('Preview section not found');
+    }
+}
 
 // تابع تبدیل اعداد انگلیسی به فارسی
 function convertToPersianNumbers(input) {
@@ -107,13 +151,6 @@ function initializeApp() {
     
     // اضافه کردن یک ردیف محصول به صورت پیش‌فرض
     addProductRow();
-    
-    // تنظیم تاریخ امروز در یادداشت‌ها به صورت پیش‌فرض
-    const today = new Date().toLocaleDateString('fa-IR');
-    const notesField = document.getElementById('notes');
-    if (notesField && !notesField.value) {
-        notesField.value = `تاریخ درخواست: ${today}\nساعات کاری: ۸ صبح تا ۵ عصر\nآدرس دقیق با ذکر پلاک ضروری است`;
-    }
     
     // به روزرسانی نمایش شماره فرم
     updateFormNumberDisplay();
@@ -417,14 +454,44 @@ async function generateSVG() {
         
         // ذخیره خودکار
         saveToLocalStorage();
-    } catch (error) {
+        // راه‌حل جایگزین: اضافه کردن مستقیم رویدادها بعد از ایجاد پیش‌نمایش
+        attachPreviewEventListeners();   
+        } catch (error) {
         // در صورت خطا فقط SVG نمایش داده شود
         showMessage('⚠️ فایل SVG تولید شد اما تبدیل به JPG با خطا مواجه شد.', 'warning');
         showPreview(svgContent);
         console.error('خطا در تولید JPG:', error);
     }
 }
-
+// تابع برای اضافه کردن رویدادها به دکمه‌های پیش‌نمایش
+function attachPreviewEventListeners() {
+    console.log('Attaching preview event listeners...');
+    
+    const downloadJpgBtn = document.getElementById('downloadJpgBtn');
+    const downloadSvgTxtBtn = document.getElementById('downloadSvgTxtBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const closePreviewBtn = document.getElementById('closePreview');
+    
+    if (downloadJpgBtn) {
+        downloadJpgBtn.addEventListener('click', downloadJPG);
+        console.log('Download JPG button event attached');
+    }
+    
+    if (downloadSvgTxtBtn) {
+        downloadSvgTxtBtn.addEventListener('click', downloadSvgAsTxt);
+        console.log('Download SVG text button event attached');
+    }
+    
+    if (shareBtn) {
+        shareBtn.addEventListener('click', shareJPG);
+        console.log('Share button event attached');
+    }
+    
+    if (closePreviewBtn) {
+        closePreviewBtn.addEventListener('click', closePreview);
+        console.log('Close preview button event attached');
+    }
+}
 // پیش‌نمایش SVG و JPG
 async function previewSVG() {
     console.log('Previewing SVG...');
@@ -792,85 +859,51 @@ function downloadSvgAsTxt() {
     showMessage('✅ متن SVG با موفقیت در فایل TXT ذخیره شد: ' + filename, 'success');
 }
 
-// اشتراک‌گذاری همزمان فایل JPG و TXT
-async function shareSVG() {
-    if (!currentJpgBlob || !currentSvgContent) {
-        showMessage('❌ ابتدا فایل‌ها را تولید کنید', 'warning');
+// اشتراک‌گذاری فایل JPG - نسخه بهبود یافته
+function shareJPG() {
+    console.log('Share button clicked');
+    
+    if (!currentJpgBlob) {
+        showMessage('❌ ابتدا فایل JPG را تولید کنید', 'warning');
         return;
     }
     
-    if (navigator.share && navigator.canShare) {
-        try {
-            // ایجاد فایل JPG
-            const jpgFile = new File([currentJpgBlob], currentFileName, { type: 'image/jpeg' });
+    // ایجاد یک فرمت بهتر برای نام فایل
+    const buyerName = document.getElementById('buyerName').value || 'بدون-نام';
+    const formNumber = getCurrentFormNumber() - 1;
+    const timestamp = new Date().toLocaleDateString('fa-IR').replace(/\//g, '-');
+    const fileName = `فرم-تحویل-${formNumber}-${buyerName}-${timestamp}.jpg`;
+    
+    try {
+        if (navigator.share) {
+            const file = new File([currentJpgBlob], fileName, { 
+                type: 'image/jpeg'
+            });
             
-            // ایجاد فایل TXT از SVG
-            const txtFileName = currentFileName.replace('.jpg', '.txt');
-            const txtBlob = new Blob([currentSvgContent], { type: 'text/plain;charset=utf-8' });
-            const txtFile = new File([txtBlob], txtFileName, { type: 'text/plain' });
-            
-            // بررسی قابلیت اشتراک‌گذاری چند فایل
-            const filesToShare = [jpgFile, txtFile];
-            
-            // بررسی اینکه آیا مرورگر از اشتراک‌گذاری این فایل‌ها پشتیبانی می‌کند
-            if (navigator.canShare && navigator.canShare({ files: filesToShare })) {
-                await navigator.share({
-                    title: `فرم درخواست تحویل کالا - شماره ${getCurrentFormNumber() - 1}`,
-                    text: 'فایل‌های فرم تحویل کالا شامل تصویر و متن',
-                    files: filesToShare
-                });
-                
-                showMessage('✅ فایل‌های JPG و TXT با موفقیت به اشتراک گذاشته شدند', 'success');
-            } else {
-                // اگر نتوانست چند فایل را به اشتراک بگذارد، فقط فایل JPG را به اشتراک بگذارد
-                await navigator.share({
-                    title: `فرم درخواست تحویل کالا - شماره ${getCurrentFormNumber() - 1}`,
-                    text: 'فایل فرم تحویل کالا',
-                    files: [jpgFile]
-                });
-                
+            navigator.share({
+                title: 'فرم درخواست تحویل کالا',
+                text: `فرم شماره ${formNumber} - خریدار: ${buyerName}`,
+                files: [file]
+            }).then(() => {
                 showMessage('✅ فایل JPG با موفقیت به اشتراک گذاشته شد', 'success');
-            }
-            
-        } catch (error) {
-            if (error.name !== 'AbortError') {
-                console.error('خطا در اشتراک‌گذاری:', error);
-                
-                // اگر اشتراک‌گذاری مستقیم کار نکرد، گزینه دانلود را پیشنهاد بده
-                showMessage(`
-                    <div>
-                        <p>❌ اشتراک‌گذاری مستقیم ممکن نیست.</p>
-                        <p>می‌توانید فایل‌ها را دانلود کنید:</p>
-                        <div class="mt-2">
-                            <button onclick="downloadJPG()" class="btn btn-sm btn-success me-2">
-                                <i class="bi bi-download me-1"></i>دانلود JPG
-                            </button>
-                            <button onclick="downloadSvgAsTxt()" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-download me-1"></i>دانلود TXT
-                            </button>
-                        </div>
-                    </div>
-                `, 'warning');
-            } else {
-                showMessage('اشتراک‌گذاری لغو شد', 'info');
-            }
+            }).catch(error => {
+                if (error.name !== 'AbortError') {
+                    console.error('خطا در اشتراک‌گذاری:', error);
+                    // اگر اشتراک‌گذاری ناموفق بود، دانلود شود
+                    downloadJPG();
+                    showMessage('اشتراک‌گذاری ناموفق. فایل دانلود شد.', 'info');
+                }
+            });
+        } else {
+            // اگر مرورگر از Web Share API پشتیبانی نمی‌کند
+            console.log('Web Share API not supported, downloading instead');
+            downloadJPG();
+            showMessage('❌ مرورگر شما از قابلیت اشتراک‌گذاری فایل پشتیبانی نمی‌کند. فایل دانلود شد.', 'warning');
         }
-    } else {
-        // اگر مرورگر از Web Share API پشتیبانی نمی‌کند
-        showMessage(`
-            <div>
-                <p>❌ مرورگر شما از قابلیت اشتراک‌گذاری فایل پشتیبانی نمی‌کند.</p>
-                <p>لطفاً از دکمه‌های زیر برای دانلود فایل‌ها استفاده کنید:</p>
-                <div class="mt-2">
-                    <button onclick="downloadJPG()" class="btn btn-sm btn-success me-2">
-                        <i class="bi bi-download me-1"></i>دانلود JPG
-                    </button>
-                    <button onclick="downloadSvgAsTxt()" class="btn btn-sm btn-outline-primary">
-                        <i class="bi bi-download me-1"></i>دانلود TXT
-                    </button>
-                </div>
-            </div>
-        `, 'warning');
+    } catch (error) {
+        console.error('خطا در اشتراک‌گذاری:', error);
+        downloadJPG();
+        showMessage('اشتراک‌گذاری ناموفق. فایل دانلود شد.', 'info');
     }
 }
 
