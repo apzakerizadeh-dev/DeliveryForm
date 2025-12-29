@@ -792,29 +792,85 @@ function downloadSvgAsTxt() {
     showMessage('✅ متن SVG با موفقیت در فایل TXT ذخیره شد: ' + filename, 'success');
 }
 
-// اشتراک‌گذاری فایل JPG
-function shareSVG() {
-    if (!currentJpgBlob) {
-        showMessage('❌ ابتدا فایل JPG را تولید کنید', 'warning');
+// اشتراک‌گذاری همزمان فایل JPG و TXT
+async function shareSVG() {
+    if (!currentJpgBlob || !currentSvgContent) {
+        showMessage('❌ ابتدا فایل‌ها را تولید کنید', 'warning');
         return;
     }
     
-    if (navigator.share) {
-        const file = new File([currentJpgBlob], currentFileName, { type: 'image/jpeg' });
-        
-        navigator.share({
-            title: 'فرم درخواست تحویل کالا',
-            text: 'این فرم تحویل کالا را بررسی کنید',
-            files: [file]
-        }).then(() => {
-            showMessage('✅ فایل JPG با موفقیت به اشتراک گذاشته شد', 'success');
-        }).catch(error => {
-            if (error.name !== 'AbortError') {
-                showMessage('اشتراک‌گذاری لغو شد یا پشتیبانی نمی‌شود', 'info');
+    if (navigator.share && navigator.canShare) {
+        try {
+            // ایجاد فایل JPG
+            const jpgFile = new File([currentJpgBlob], currentFileName, { type: 'image/jpeg' });
+            
+            // ایجاد فایل TXT از SVG
+            const txtFileName = currentFileName.replace('.jpg', '.txt');
+            const txtBlob = new Blob([currentSvgContent], { type: 'text/plain;charset=utf-8' });
+            const txtFile = new File([txtBlob], txtFileName, { type: 'text/plain' });
+            
+            // بررسی قابلیت اشتراک‌گذاری چند فایل
+            const filesToShare = [jpgFile, txtFile];
+            
+            // بررسی اینکه آیا مرورگر از اشتراک‌گذاری این فایل‌ها پشتیبانی می‌کند
+            if (navigator.canShare && navigator.canShare({ files: filesToShare })) {
+                await navigator.share({
+                    title: `فرم درخواست تحویل کالا - شماره ${getCurrentFormNumber() - 1}`,
+                    text: 'فایل‌های فرم تحویل کالا شامل تصویر و متن',
+                    files: filesToShare
+                });
+                
+                showMessage('✅ فایل‌های JPG و TXT با موفقیت به اشتراک گذاشته شدند', 'success');
+            } else {
+                // اگر نتوانست چند فایل را به اشتراک بگذارد، فقط فایل JPG را به اشتراک بگذارد
+                await navigator.share({
+                    title: `فرم درخواست تحویل کالا - شماره ${getCurrentFormNumber() - 1}`,
+                    text: 'فایل فرم تحویل کالا',
+                    files: [jpgFile]
+                });
+                
+                showMessage('✅ فایل JPG با موفقیت به اشتراک گذاشته شد', 'success');
             }
-        });
+            
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                console.error('خطا در اشتراک‌گذاری:', error);
+                
+                // اگر اشتراک‌گذاری مستقیم کار نکرد، گزینه دانلود را پیشنهاد بده
+                showMessage(`
+                    <div>
+                        <p>❌ اشتراک‌گذاری مستقیم ممکن نیست.</p>
+                        <p>می‌توانید فایل‌ها را دانلود کنید:</p>
+                        <div class="mt-2">
+                            <button onclick="downloadJPG()" class="btn btn-sm btn-success me-2">
+                                <i class="bi bi-download me-1"></i>دانلود JPG
+                            </button>
+                            <button onclick="downloadSvgAsTxt()" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-download me-1"></i>دانلود TXT
+                            </button>
+                        </div>
+                    </div>
+                `, 'warning');
+            } else {
+                showMessage('اشتراک‌گذاری لغو شد', 'info');
+            }
+        }
     } else {
-        showMessage('❌ مرورگر شما از قابلیت اشتراک‌گذاری فایل پشتیبانی نمی‌کند. لطفاً از دانلود استفاده کنید.', 'warning');
+        // اگر مرورگر از Web Share API پشتیبانی نمی‌کند
+        showMessage(`
+            <div>
+                <p>❌ مرورگر شما از قابلیت اشتراک‌گذاری فایل پشتیبانی نمی‌کند.</p>
+                <p>لطفاً از دکمه‌های زیر برای دانلود فایل‌ها استفاده کنید:</p>
+                <div class="mt-2">
+                    <button onclick="downloadJPG()" class="btn btn-sm btn-success me-2">
+                        <i class="bi bi-download me-1"></i>دانلود JPG
+                    </button>
+                    <button onclick="downloadSvgAsTxt()" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-download me-1"></i>دانلود TXT
+                    </button>
+                </div>
+            </div>
+        `, 'warning');
     }
 }
 
