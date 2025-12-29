@@ -1,4 +1,4 @@
-	<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -49,14 +49,36 @@
                                 <input type="text" id="buyerName" class="form-control form-control-lg" placeholder="نام و نام خانوادگی">
                             </div>
 
+                                <!-- اضافه کردن فیلدهای جدید برای شماره تلفن -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">تلفن خریدار <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                <span class="input-group-text">📞</span>
+                                <input type="tel" id="buyerPhone" class="form-control form-control-lg" placeholder="مثال: ۰۹۱۲۳۴۵۶۷۸۹">
+                            </div>
+                                <small class="text-muted">شماره تلفن خریدار</small>
+                            </div>
+
+                            
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">نام دریافت‌کننده <span class="text-danger">*</span></label>
                                 <input type="text" id="receiverName" class="form-control form-control-lg" placeholder="نام و نام خانوادگی">
                             </div>
 
+
+                            <!-- تغییر: جایگاه تلفن دریافت‌کننده به سمت چپ نام دریافت‌کننده منتقل شد -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">تلفن دریافت‌کننده <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                <span class="input-group-text">📞</span>
+                                <input type="tel" id="receiverPhone" class="form-control form-control-lg" placeholder="مثال: ۰۹۱۲۳۴۵۶۷۸۹">
+                            </div>
+                            <small class="text-muted">شماره تلفن دریافت‌کننده</small>
+                            </div>
+
                             <div class="col-12">
                                 <label class="form-label fw-semibold">آدرس تحویل <span class="text-danger">*</span></label>
-                                <textarea id="address" class="form-control form-control-lg" rows="3" placeholder="آدرس کامل تحویل کالا"></textarea>
+                                <textarea id="address" class="form-control form-control-lg" rows="3" placeholder="آدرس کامل محل تحویل کالا"></textarea>
                             </div>
 
                             <div class="col-md-6">
@@ -67,7 +89,7 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">درصد تخفیف</label>
                                 <div class="input-group">
-                                    <input type="number" id="discount" class="form-control form-control-lg" placeholder="مثلاً ۱۰" min="0" max="100">
+                                    <input type="number" id="discount" class="form-control form-control-lg" placeholder="0" min="0" max="100">
                                     <span class="input-group-text">%</span>
                                 </div>
                             </div>
@@ -141,33 +163,25 @@
                     <!-- SVG اینجا نمایش داده می‌شود -->
                 </div>
                 <div class="mt-4 d-flex flex-wrap gap-3 justify-content-center">
-                    <button id="downloadBtn" class="btn btn-success px-4">
-                        <i class="bi bi-download me-2"></i>دانلود فایل SVG
+                    <!-- تغییر: فقط 4 دکمه درخواستی باقی مانده -->
+                    <button id="downloadJpgBtn" class="btn btn-success px-4">
+                        <i class="bi bi-download me-2"></i>دانلود فایل JPG
                     </button>
-                    <button id="shareBtn" class="btn btn-outline-primary px-4">
+                    <button id="downloadSvgTxtBtn" class="btn btn-outline-primary px-4">
+                        <i class="bi bi-download me-2"></i>دانلود متن SVG
+                    </button>
+                    <button id="shareBtn" class="btn btn-outline-info px-4">
                         <i class="bi bi-share me-2"></i>اشتراک‌گذاری
-                    </button>
-                    <button id="copyBtn" class="btn btn-outline-secondary px-4">
-                        <i class="bi bi-clipboard me-2"></i>کپی متن SVG
                     </button>
                     <button id="closePreview" class="btn btn-outline-danger px-4">
                         <i class="bi bi-x-circle me-2"></i>بستن پیش‌نمایش
-                    </button>
-                </div>
-                <!-- در بخش پیش‌نمایش SVG، بعد از دکمه‌های موجود -->
-                <div class="download-options mt-3">
-                    <button id="downloadJpgBtn" class="btn btn-success px-4 format-btn">
-                        <i class="bi bi-download me-2"></i>دانلود JPG
-                    </button>
-                    <button id="downloadSvgBtn" class="btn btn-outline-primary px-4 format-btn">
-                        <i class="bi bi-download me-2"></i>دانلود SVG
                     </button>
                 </div>
 
                 <div class="mt-3 text-center">
                     <small class="text-muted">
                         <i class="bi bi-info-circle me-1"></i>
-                        فایل SVG را می‌توانید با مرورگرهای مدرن، نرم‌افزارهای ویرایش تصویر یا Adobe Illustrator باز کنید
+                        فایل JPG برای چاپ و اشتراک‌گذاری | متن SVG برای ذخیره به صورت متنی
                     </small>
                 </div>
             </div>
